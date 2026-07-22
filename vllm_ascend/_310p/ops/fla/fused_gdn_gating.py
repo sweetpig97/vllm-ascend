@@ -24,11 +24,15 @@ def fused_gdn_gating(
         g: gating parameter, shape [1, batch, num_heads]
         beta_output: sigmoid(b), shape [1, batch, num_heads]
     """
+    A_log_typed = A_log.to(torch.float16)
+    a_typed = a.to(torch.float16)
+    b_typed = b.to(torch.float16)
+    dt_bias_typed = dt_bias.to(torch.float16)
     return torch.ops._C_ascend.npu_fused_gdn_gating(
-        A_log,
-        a,
-        b,
-        dt_bias,
+        A_log_typed,
+        a_typed,
+        b_typed,
+        dt_bias_typed,
         beta,
         threshold,
     )
